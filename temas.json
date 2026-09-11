@@ -124,7 +124,24 @@
           "Un mito histórico que en realidad es falso",
           "Qué le dirías a alguien de hace 200 años sobre el presente"
         ]
-      }
+      },
+      {
+        "id": "literatura",
+        "label": "Literatura",
+        "icon": "📚",
+        "topics": [
+          "Tu primera compra importante con dinero ahorrado",
+          "Un error financiero que cometiste y qué aprendiste",
+          "Cómo divides tus gastos cada quincena",
+          "Un gasto hormiga que deberías cortar",
+          "Ahorrar vs. invertir: ¿qué haces tú primero?",
+          "Tu meta financiera para este año",
+          "Algo que compraste caro y no te arrepientes",
+          "Cómo le explicarías el interés compuesto a un niño",
+          "Una app o método que usas para controlar tus gastos",
+          "Tu opinión sobre pedir prestado a familia o amigos"
+        ]
+      },
     ]
   },
   "deep": [
