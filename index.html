@@ -157,7 +157,7 @@
     display:flex; align-items:center; justify-content:center;
     overflow:hidden;
   }
-  .topic-text .placeholder{ color: var(--text-dim); font-style:italic; font-weight:500; font-size:1.em; }
+  .topic-text .placeholder{ color: var(--text-dim); font-style:Thin; font-weight:100; font-size:0.85em; }
   @keyframes swap{
     0%{ opacity:0.25; transform: scale(0.965); }
     100%{ opacity:1; transform: scale(1); }
@@ -377,6 +377,14 @@
   @media (max-width:420px){
     .action-row{ flex-wrap: wrap; }
     .btn-icon{ order:3; margin-left:auto; margin-right:auto; }
+  }
+
+  /* Brillo/sombra para el botón flotante de Ko-fi, a juego con tus otros botones.
+     Es un widget externo, así que esto es un "empujón" desde afuera con CSS;
+     usamos "filter: drop-shadow" en vez de box-shadow porque se adapta a la
+     forma real del botón sin necesitar saber su border-radius exacto. */
+  [id^="kofi-widget-overlay"]{
+    filter: drop-shadow(0 4px 18px var(--btn-glow-1)) drop-shadow(0 0 0 1px var(--btn-glow-2));
   }
 </style>
 </head>
@@ -673,6 +681,22 @@
       })(i);
     }
   }
+  function researchCue(){
+    // Sonido suave y "de enfoque" para cuando empieza la investigación:
+    // dos notas descendentes, cálidas, sin urgencia (distinto al de "listo para explicar").
+    var c = ctx();
+    var notes = [659.25, 493.88]; // Mi5 -> Si4, un intervalo tranquilo hacia abajo
+    notes.forEach(function(freq, i){
+      var o = c.createOscillator(), g = c.createGain();
+      o.type = "sine"; o.frequency.value = freq;
+      var t0 = c.currentTime + i * 0.16;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.11, t0 + 0.05);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.55);
+      o.connect(g); g.connect(c.destination);
+      o.start(t0); o.stop(t0 + 0.6);
+    });
+  }
 
   // ---------- elements ----------
   var resultStage = document.getElementById("resultStage");
@@ -715,9 +739,9 @@
   var spinning = false;
 
   function computeDelay(i, total){
-    var base = 45, max = 230;
+    var base = 60, max = 180;
     var t = i / (total - 1);
-    var eased = t * t * t;
+    var eased = t;
     return base + (max - base) * eased;
   }
 
@@ -734,7 +758,7 @@
 
     var remaining = poolRemaining();
     var target = pick(remaining);
-    var total = 15;
+    var total = 24;
     var lastShown = null;
 
     function step(i){
@@ -883,7 +907,7 @@
     document.getElementById("backToTopic").addEventListener("click", backToResult);
   }
 
-  document.getElementById("startResearch").addEventListener("click", function(){ ctx(); goResearching(); });
+  document.getElementById("startResearch").addEventListener("click", function(){ ctx(); researchCue(); goResearching(); });
   document.getElementById("startSimpleSpeak").addEventListener("click", function(){
     ctx();
     showTimerStage();
