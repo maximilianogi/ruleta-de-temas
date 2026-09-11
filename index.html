@@ -715,9 +715,9 @@
   var spinning = false;
 
   function computeDelay(i, total){
-    var base = 55, max = 230;
+    var base = 45, max = 230;
     var t = i / (total - 1);
-    var eased = t * t;
+    var eased = t * t * t;
     return base + (max - base) * eased;
   }
 
@@ -734,7 +734,7 @@
 
     var remaining = poolRemaining();
     var target = pick(remaining);
-    var total = 20 + Math.floor(Math.random()*6);
+    var total = 15;
     var lastShown = null;
 
     function step(i){
@@ -1151,7 +1151,7 @@
      Reemplaza TU_USUARIO por tu nombre de usuario real de Ko-fi. -->
 <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
 <script>
-  kofiWidgetOverlay.draw('TU_USUARIO', {
+  kofiWidgetOverlay.draw('wvxam', {
     'type': 'floating-chat',
     'floating-chat.donateButton.text': 'Apóyame',
     'floating-chat.donateButton.background-color': '#e0995f',
