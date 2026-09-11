@@ -1,0 +1,147 @@
+{
+  "simple": {
+    "categories": [
+      {
+        "id": "general",
+        "label": "General",
+        "icon": "✨",
+        "topics": [
+          "Tu comida favorita y por qué",
+          "Un lugar al que quieres viajar",
+          "Algo que aprendiste esta semana",
+          "Tu película favorita de la infancia",
+          "Un consejo que le darías a tu yo de hace 5 años",
+          "Algo que te hace reír siempre",
+          "Tu rutina matutina ideal",
+          "Un hobby que te gustaría intentar",
+          "La mejor decisión que has tomado este año",
+          "Algo que odiabas de niño y ahora amas",
+          "Tu app favorita y por qué",
+          "Un miedo irracional que tienes",
+          "Tu superpoder ideal",
+          "Algo random sobre ti que nadie sabe",
+          "Tu opinión impopular favorita"
+        ]
+      },
+      {
+        "id": "finanzas",
+        "label": "Finanzas personales",
+        "icon": "💰",
+        "topics": [
+          "Tu primera compra importante con dinero ahorrado",
+          "Un error financiero que cometiste y qué aprendiste",
+          "Cómo divides tus gastos cada quincena",
+          "Un gasto hormiga que deberías cortar",
+          "Ahorrar vs. invertir: ¿qué haces tú primero?",
+          "Tu meta financiera para este año",
+          "Algo que compraste caro y no te arrepientes",
+          "Cómo le explicarías el interés compuesto a un niño",
+          "Una app o método que usas para controlar tus gastos",
+          "Tu opinión sobre pedir prestado a familia o amigos"
+        ]
+      },
+      {
+        "id": "emprendimiento",
+        "label": "Emprendimiento",
+        "icon": "🚀",
+        "topics": [
+          "La idea de negocio que traes en la cabeza ahora mismo",
+          "Un negocio que crees que le falta a tu ciudad",
+          "El primer cliente: cómo conseguirías uno hoy mismo",
+          "Un emprendedor que admiras y por qué",
+          "Bootstrapping vs. buscar inversión: tu postura",
+          "El error más común al empezar un negocio",
+          "Cómo le pondrías precio a un producto nuevo",
+          "Una habilidad de negocios que te falta desarrollar",
+          "Qué harías si tu negocio no genera ganancias en 6 meses",
+          "Un producto que comprarías de otro emprendedor local"
+        ]
+      },
+      {
+        "id": "tech",
+        "label": "Tecnología / IA",
+        "icon": "🤖",
+        "topics": [
+          "Una herramienta de IA que usas seguido",
+          "Cómo crees que la IA cambiará tu trabajo en 5 años",
+          "Una app que dejaste de usar y por qué",
+          "Tu opinión sobre trabajar 100% remoto",
+          "Un invento tecnológico que te parece sobrevalorado",
+          "Algo que la tecnología resolvió mal, a tu parecer",
+          "Cómo explicarías qué es la IA a tu abuela",
+          "Una red social que crees que va a desaparecer",
+          "El límite ético que no cruzarías con IA",
+          "Una predicción tecnológica tuya para los próximos 10 años"
+        ]
+      },
+      {
+        "id": "fitness",
+        "label": "Fitness",
+        "icon": "💪",
+        "topics": [
+          "Tu rutina de ejercicio ideal en un día perfecto",
+          "Un mito del fitness que ya no crees",
+          "Cómo te motivas los días que no quieres entrenar",
+          "Cardio vs. pesas: con cuál te quedas",
+          "Un deporte que te gustaría aprender desde cero",
+          "Tu snack favorito antes o después de entrenar",
+          "Algo que cambiaría tu cuerpo si entrenaras 1 año seguido",
+          "Una lesión o bajón que te enseñó algo",
+          "Entrenar solo vs. en grupo: qué prefieres y por qué",
+          "El ejercicio que más odias pero sabes que sirve"
+        ]
+      },
+      {
+        "id": "productividad",
+        "label": "Productividad",
+        "icon": "⚡",
+        "topics": [
+          "Tu método favorito para organizar el día",
+          "Una técnica de productividad que probaste y no funcionó",
+          "Cómo evitas procrastinar en tareas aburridas",
+          "Tu peor hábito de trabajo y cómo lo compensas",
+          "Multitasking: ¿mito o realidad para ti?",
+          "La hora del día en la que más rindes",
+          "Una herramienta o app que te salvó la semana",
+          "Cómo dices que no a compromisos sin culpa",
+          "Trabajar bajo presión: ¿te ayuda o te frena?",
+          "Un ritual antes de empezar a trabajar"
+        ]
+      },
+      {
+        "id": "historia",
+        "label": "Historia",
+        "icon": "📜",
+        "topics": [
+          "Un evento histórico que te hubiera gustado presenciar",
+          "Una época de la historia en la que NO te gustaría vivir",
+          "Un personaje histórico que crees que está sobrevalorado",
+          "Algo de la historia de México que casi nadie recuerda",
+          "Una invención antigua que sigues usando su versión moderna",
+          "Un imperio o civilización que te fascina",
+          "Una decisión histórica que cambió todo para mal",
+          "Algo que la gente del pasado sabía y hoy olvidamos",
+          "Un mito histórico que en realidad es falso",
+          "Qué le dirías a alguien de hace 200 años sobre el presente"
+        ]
+      }
+    ]
+  },
+  "deep": [
+    "Un objeto cotidiano con un origen sorprendente",
+    "Una teoría científica que cambió cómo vemos el mundo",
+    "Un error histórico con consecuencias enormes",
+    "Una tecnología que casi nadie recuerda hoy",
+    "Un animal con una habilidad que parece ciencia ficción",
+    "Una ciudad que fue abandonada por completo",
+    "Una regla social que no siempre existió",
+    "Un invento que se creó por accidente",
+    "Una palabra que cambió de significado con el tiempo",
+    "Un fenómeno natural que parece imposible",
+    "Una decisión de negocios que salió muy mal",
+    "Un dato sobre el espacio que nadie te enseñó en la escuela",
+    "Una tradición extraña que sigue viva hoy",
+    "Un mito que la mayoría cree que es verdad",
+    "Una persona desconocida detrás de algo famoso"
+  ]
+}

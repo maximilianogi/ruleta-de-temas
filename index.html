@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Ruleta de temas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0: #0a0c0a;
+    --bg-1: #050605;
+    --glow-1: rgba(216,138,79,0.42);
+    --glow-2: rgba(63,138,146,0.34);
+    --glow-3: rgba(133,64,110,0.28);
+    --line: rgba(255,255,255,0.10);
+    --text: #f2eee6;
+    --text-dim: #9a9a94;
+    --accent: #e0995f;
+    --accent-soft: rgba(224,153,95,0.14);
+    --research: #7fc9d4;
+    --research-soft: rgba(127,201,212,0.14);
+    --phase-color: var(--accent);
+    --phase-soft: var(--accent-soft);
+    --surface: #111412;
+    --surface-2: #0a0c0a;
+    --floating-bg: rgba(15,17,15,0.88);
+    --pill-bg: rgba(255,255,255,0.04);
+    --ring-track: rgba(255,255,255,0.07);
+    --circle-fill: rgba(255,255,255,0.015);
+    --circle-shadow: rgba(0,0,0,0.35);
+    --switch-track: rgba(255,255,255,0.12);
+    --switch-thumb: #cfcfcf;
+    --btn-glow-1: rgba(224,153,95,0.38);
+    --btn-glow-2: rgba(224,153,95,0.15);
+    --mode-glow-1: rgba(224,153,95,0.5);
+    --mode-glow-2: rgba(224,153,95,0.3);
+    --overlay-veil: rgba(0,0,0,0.65);
+    --hover-tint: rgba(255,255,255,0.08);
+  }
+  html[data-theme="light"]{
+    --bg-0: #faf6ee;
+    --bg-1: #f2ebdd;
+    --glow-1: rgba(216,138,79,0.22);
+    --glow-2: rgba(63,138,146,0.18);
+    --glow-3: rgba(133,64,110,0.14);
+    --line: rgba(20,15,10,0.14);
+    --text: #211d18;
+    --text-dim: #746c60;
+    --accent: #bd6032;
+    --accent-soft: rgba(189,96,50,0.14);
+    --research: #1f7f8a;
+    --research-soft: rgba(31,127,138,0.14);
+    --surface: #ffffff;
+    --surface-2: #ffffff;
+    --floating-bg: rgba(255,255,255,0.9);
+    --pill-bg: rgba(20,15,10,0.045);
+    --ring-track: rgba(20,15,10,0.10);
+    --circle-fill: rgba(20,15,10,0.02);
+    --circle-shadow: rgba(20,15,10,0.10);
+    --switch-track: rgba(20,15,10,0.14);
+    --switch-thumb: #ffffff;
+    --btn-glow-1: rgba(189,96,50,0.30);
+    --btn-glow-2: rgba(189,96,50,0.14);
+    --mode-glow-1: rgba(189,96,50,0.35);
+    --mode-glow-2: rgba(189,96,50,0.22);
+    --overlay-veil: rgba(30,22,14,0.45);
+    --hover-tint: rgba(20,15,10,0.06);
+  }
+  html{ transition: background-color .2s; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; height:100%; }
+  body{
+    min-height:100dvh;
+    background:
+      radial-gradient(75vw 65vh at 8% -8%, var(--glow-1), transparent 60%),
+      radial-gradient(75vw 65vh at 95% -8%, var(--glow-2), transparent 60%),
+      radial-gradient(85vw 65vh at 50% 112%, var(--glow-3), transparent 65%),
+      linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 100%);
+    color: var(--text);
+    font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    display:flex; flex-direction:column; align-items:center;
+    padding: 30px 20px 40px;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+    overflow: auto;
+  }
+  #appRoot{
+    display:flex; flex-direction:column; align-items:center;
+    width:100%;
+    transform-origin: top center;
+    transition: transform .12s ease;
+  }
+  .zoom-control{
+    position:fixed; bottom:16px; right:16px; z-index:50;
+    display:flex; align-items:center; gap:2px;
+    background: var(--floating-bg);
+    border:1px solid var(--line); border-radius:999px;
+    padding:5px; backdrop-filter: blur(6px);
+  }
+  .zoom-control button{
+    appearance:none; border:none; background:transparent; color:var(--text);
+    width:32px; height:32px; border-radius:999px; cursor:pointer;
+    font-size:15px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .zoom-control button:hover{ background: var(--hover-tint); }
+  .zoom-control button svg{ display:block; }
+  .ctrl-sep{ width:1px; height:18px; background:var(--line); margin:0 3px; }
+  #zoomReset{ font-size:11.5px; width:auto; padding:0 9px; color:var(--text-dim); font-weight:600; }
+  #zoomToggle{ color:var(--text-dim); font-size:15px; }
+  .zoom-fab{
+    position:fixed; bottom:16px; right:16px; z-index:50;
+    width:36px; height:36px; border-radius:50%;
+    background: var(--floating-bg); border:1px solid var(--line); color:var(--text-dim);
+    cursor:pointer; font-size:15px;
+  }
+  .serif{ font-family:'Fraunces', Georgia, 'Times New Roman', serif; }
+
+  header{
+    width:100%; max-width:560px;
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom: 8px;
+  }
+  header .brand{ font-size:13px; color: var(--text-dim); letter-spacing:0.2px; }
+  header .brand b{ color: var(--text); font-weight:600; }
+
+  .stage{
+    width:100%; max-width:560px;
+    flex:1;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding: 30px 0 10px;
+    min-height: 440px;
+  }
+
+  .subtitle{
+    color: var(--text-dim); font-size:12.5px; max-width:380px; line-height:1.5;
+    margin-bottom: 34px;
+  }
+
+  .eyebrow{
+    font-size:10.5px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase;
+    color: var(--accent); margin-bottom:14px;
+  }
+
+  .topic-text{
+    font-size: clamp(28px, 6.3vw, 46px);
+    font-weight:600; line-height:1.18; max-width:540px;
+    margin: 0 0 8px;
+    height: 3.9em;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  .topic-text .placeholder{ color: var(--text-dim); font-style:italic; font-weight:500; font-size:0.62em; }
+  @keyframes swap{
+    0%{ opacity:0.25; transform: scale(0.965); }
+    100%{ opacity:1; transform: scale(1); }
+  }
+  .topic-text.pulse{ animation: swap .11s ease-out; }
+
+  .action-row{
+    display:flex; align-items:center; gap:10px;
+    margin-top: 52px;
+    width:100%; max-width:420px;
+  }
+  .action-row.single{ justify-content:center; }
+  #timerButtons{ justify-content:center; }
+  .action-row.disabled{ opacity:0.4; pointer-events:none; }
+  .action-row.disabled .btn, .action-row.disabled .btn-icon{ filter: grayscale(0.4); }
+
+  .btn{
+    appearance:none; border:none; cursor:pointer;
+    font-size:15px; font-weight:700;
+    padding: 14px 22px;
+    border-radius: 999px;
+    letter-spacing:0.1px;
+    transition: transform .08s ease, filter .15s, background .15s;
+    white-space:nowrap;
+  }
+  .btn:active{ transform: scale(0.97); }
+  .btn-primary{
+    background: var(--accent); color:#161008;
+    flex: 1;
+    box-shadow: 0 4px 22px var(--btn-glow-1), 0 0 0 1px var(--btn-glow-2);
+  }
+  .btn-primary:hover{ filter:brightness(1.08); }
+  .btn-outline{
+    background: transparent; color: var(--text);
+    border: 1px solid var(--line);
+    flex: 1.3;
+  }
+  .btn-outline:hover{ border-color: var(--accent); }
+  .btn-icon{
+    width:48px; height:48px; min-width:48px; border-radius:50%;
+    background: transparent; border:1px solid var(--line); color: var(--text-dim);
+    display:flex; align-items:center; justify-content:center; font-size:17px;
+    flex: none;
+  }
+  .btn-icon:hover{ border-color: var(--accent); color: var(--text); }
+
+  /* Editor de temas oculto en la versión pública: la fuente de verdad ahora es
+     temas.json. Borra esta regla si algún día quieres reactivar el editor
+     en pantalla (por ejemplo, para una versión de uso solo para ti). */
+  #openEditor1, #openEditor2{ display:none !important; }
+
+  .mode-row{
+    display:flex; gap:4px;
+    background: var(--pill-bg);
+    border:1px solid var(--line); border-radius:999px;
+    padding:5px; margin-bottom: 10px;
+  }
+  .mode-btn{
+    appearance:none; border:none; cursor:pointer;
+    background: transparent; color: var(--text-dim);
+    font-size:14px; font-weight:700;
+    padding: 10px 18px; border-radius:999px;
+    display:flex; align-items:center; gap:7px;
+    transition: background .18s, color .18s, box-shadow .18s;
+    white-space:nowrap;
+  }
+  .mode-btn.active{
+    background: var(--accent); color:#161008;
+    box-shadow: 0 0 20px var(--mode-glow-1), 0 0 0 1px var(--mode-glow-2);
+  }
+
+  .category-dropdown{ position:relative; width:100%; max-width:280px; margin: 0 0 22px; }
+  .category-btn{
+    width:100%; display:flex; align-items:center; gap:8px; justify-content:space-between;
+    appearance:none; cursor:pointer; background: var(--pill-bg); border:1px solid var(--line);
+    color:var(--text); border-radius:999px; padding:10px 16px; font-size:13.5px; font-weight:700;
+  }
+  .category-btn:hover{ border-color: var(--accent); }
+  .category-btn .cat-left{ display:flex; align-items:center; gap:8px; }
+  .category-chevron{ transition: transform .15s; flex:none; }
+  .category-dropdown.open .category-chevron{ transform: rotate(180deg); }
+  .category-menu{
+    position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:40;
+    background: var(--floating-bg); border:1px solid var(--line); border-radius:14px;
+    padding:6px; max-height:260px; overflow-y:auto; backdrop-filter: blur(8px);
+    display:none; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+  .category-dropdown.open .category-menu{ display:block; }
+  .category-option{
+    width:100%; display:flex; align-items:center; gap:9px; text-align:left;
+    appearance:none; border:none; background:transparent; cursor:pointer;
+    color:var(--text); font-size:13.5px; font-weight:600; padding:10px 10px; border-radius:9px;
+  }
+  .category-option:hover{ background: var(--hover-tint); }
+  .category-option.active{ background: var(--accent-soft); color: var(--accent); }
+  .category-hint{ font-size:11.5px; color: var(--text-dim); margin: -4px 0 10px; }
+
+  .link-btn{
+    background:none; border:none; color: var(--text-dim);
+    text-decoration: underline; cursor:pointer; font-size:13.5px;
+    padding: 8px 10px;
+  }
+  .link-btn:hover{ color: var(--text); }
+
+  /* ---- timer stage ---- */
+  #timerStage{ display:none; }
+  .phase-tag{
+    font-size:11.5px; font-weight:700; letter-spacing:1.6px; text-transform:uppercase;
+    color: var(--phase-color); margin-bottom: 10px; min-height:14px;
+    transition: color .3s;
+  }
+  .circle-wrap{
+    position:relative; width:220px; height:220px; margin: 0 auto 26px;
+  }
+  .circle-glow{
+    position:absolute; inset:-30px; border-radius:50%;
+    background: radial-gradient(circle, var(--phase-color) 0%, transparent 68%);
+    opacity:0.16; filter: blur(6px);
+    transition: background .3s;
+  }
+  .ring-svg{
+    position:absolute; inset:0; width:100%; height:100%;
+    transform: rotate(-90deg);
+    pointer-events:none;
+  }
+  .ring-bg{ fill:none; stroke: var(--ring-track); stroke-width:7; }
+  .ring-progress{
+    fill:none; stroke: var(--phase-color); stroke-width:7; stroke-linecap:round;
+    transition: stroke-dashoffset 1s linear, stroke .3s;
+  }
+  .circle{
+    position:relative; width:100%; height:100%; border-radius:50%;
+    border: 1px solid var(--line);
+    background: var(--circle-fill);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 0 60px var(--circle-shadow) inset;
+  }
+  .circle-digits{
+    font-size:72px; font-weight:600; color: var(--phase-color);
+    font-variant-numeric: tabular-nums;
+    line-height:1;
+    text-align:center;
+    transform: translateY(-8px);
+    transition: color .3s;
+  }
+  .timer-sub{
+    color: var(--text-dim); font-size:15px; line-height:1.6; margin-bottom: 26px;
+  }
+  .timer-sub .l2{ font-size:13.5px; }
+
+  /* ---- modal ---- */
+  .overlay{
+    display:none; position:fixed; inset:0; background: var(--overlay-veil);
+    align-items:center; justify-content:center; z-index:10; padding:20px;
+  }
+  .overlay.show{ display:flex; }
+  .modal{
+    width:100%; max-width:460px; background: var(--surface);
+    border:1px solid var(--line); border-radius:18px; padding:22px;
+    max-height:85vh; display:flex; flex-direction:column;
+  }
+  .modal h2{ margin:0 0 4px; font-size:17px; font-weight:600; }
+  .modal p{ margin:0 0 14px; font-size:13px; color:var(--text-dim); line-height:1.5; }
+  .modal-tabs{ display:flex; gap:6px; margin-bottom:10px; }
+  .modal-tabs button{
+    flex:1; padding:9px 0; border-radius:9px; border:1px solid var(--line);
+    background:transparent; color:var(--text-dim); font-size:13.5px; font-weight:600; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+  }
+  .modal-tabs button.active{ background: var(--accent-soft); border-color: var(--accent); color: var(--text); }
+  .modal textarea{
+    flex:1; min-height:200px; resize:vertical;
+    background: var(--surface-2); border:1px solid var(--line); border-radius:10px;
+    color:var(--text); padding:12px; font-size:14px; line-height:1.5;
+    font-family: inherit;
+  }
+  .modal-toggle{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-top:14px; padding:12px 4px; border-top:1px solid var(--line);
+    font-size:13.5px; color: var(--text);
+  }
+  .switch{
+    position:relative; width:40px; height:23px; border-radius:99px;
+    background: var(--switch-track); border:1px solid var(--line); cursor:pointer;
+    flex:none;
+  }
+  .switch.on{ background: var(--accent-soft); border-color: var(--accent); }
+  .switch::after{
+    content:""; position:absolute; top:2px; left:2px; width:17px; height:17px;
+    border-radius:50%; background:var(--switch-thumb); transition: transform .15s, background .15s;
+  }
+  .switch.on::after{ transform: translateX(17px); background: var(--accent); }
+
+  .modal-segment{
+    margin-top:14px; padding:12px 4px 4px; border-top:1px solid var(--line);
+  }
+  .modal-segment > span{ display:block; font-size:13.5px; color:var(--text); margin-bottom:10px; }
+  .segment{ display:flex; gap:8px; }
+  .segment button{
+    flex:1; padding:9px 0; border-radius:9px; border:1px solid var(--line);
+    background:transparent; color:var(--text-dim); font-size:13.5px; font-weight:600; cursor:pointer;
+  }
+  .segment button.on{ background: var(--accent-soft); border-color: var(--accent); color: var(--text); }
+
+  .modal-footer{ display:flex; justify-content:space-between; align-items:center; margin-top:14px; gap:10px; }
+  .modal-footer .count{ font-size:12px; color:var(--text-dim); }
+  .modal-footer .btns{ display:flex; gap:8px; }
+  .modal-footer button{
+    border-radius:10px; border:1px solid var(--line); background:none;
+    color:var(--text); padding:10px 16px; font-size:13.5px; cursor:pointer; font-weight:600;
+  }
+  .modal-footer button.primary{ background: var(--accent); color:#161008; border-color:var(--accent); }
+  .modal-footer button:hover{ opacity:0.9; }
+
+  footer{ margin-top:10px; font-size:11.5px; color: var(--text-dim); opacity:0.6; text-align:center; }
+
+  @media (max-width:420px){
+    .action-row{ flex-wrap: wrap; }
+    .btn-icon{ order:3; margin-left:auto; margin-right:auto; }
+  }
+</style>
+</head>
+<body>
+
+  <div id="appRoot">
+  <header>
+    <div class="brand">ruleta de <b>temas</b></div>
+  </header>
+
+  <div class="stage" id="resultStage">
+    <div class="mode-row" id="modeRow">
+      <button class="mode-btn" data-mode="simple">🧠 Simples</button>
+      <button class="mode-btn" data-mode="deep">🔍 Profundos</button>
+    </div>
+    <div class="subtitle" id="subtitleText">Gira un tema, investiga, y explica cuando estés listo.</div>
+
+    <div class="category-dropdown" id="categoryDropdown" style="display:none;">
+      <button class="category-btn" id="categoryBtn" type="button">
+        <span class="cat-left"><span id="categoryBtnIcon">✨</span><span id="categoryBtnLabel">General</span></span>
+        <svg class="category-chevron" id="categoryChevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      <div class="category-menu" id="categoryMenu"></div>
+    </div>
+
+    <div class="eyebrow" id="eyebrowIdle">tu tema</div>
+    <div class="topic-text serif" id="topicText"><span class="placeholder">presiona girar para elegir</span></div>
+
+    <div class="action-row single" id="rowSingle">
+      <button class="btn btn-primary" id="spinBtnFirst" style="flex:0 0 auto; padding:14px 46px;">Girar</button>
+      <button class="btn-icon" id="openEditor1" title="Editar temas"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>
+    </div>
+
+    <div class="action-row" id="rowFull" style="display:none;">
+      <button class="btn btn-primary" id="spinBtnAgain">Girar de nuevo</button>
+      <button class="btn btn-outline" id="startResearch">Iniciar investigación</button>
+      <button class="btn btn-outline" id="startSimpleSpeak" style="display:none;">Explicar</button>
+      <button class="btn-icon" id="openEditor2" title="Editar temas"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>
+    </div>
+  </div>
+
+  <div class="stage" id="timerStage">
+    <div class="eyebrow serif" id="timerTopic" style="font-family:'Fraunces',Georgia,serif; font-size:clamp(22px,4.4vw,32px); line-height:1.25; letter-spacing:0.2px; text-transform:none; font-weight:600; color:var(--text); max-width:480px; margin:0 auto 28px; white-space:normal;"></div>
+    <div class="phase-tag" id="phaseTag"></div>
+
+    <div class="circle-wrap">
+      <div class="circle-glow"></div>
+      <svg class="ring-svg" viewBox="0 0 220 220">
+        <circle class="ring-bg" cx="110" cy="110" r="105"></circle>
+        <circle class="ring-progress" id="ringProgress" cx="110" cy="110" r="105"></circle>
+      </svg>
+      <div class="circle"><div class="circle-digits serif" id="circleDigits">15:00</div></div>
+    </div>
+
+    <div class="timer-sub" id="timerSub"></div>
+
+    <div class="action-row" id="timerButtons"></div>
+  </div>
+
+  <footer>ruleta de temas · gira, investiga, explica</footer>
+  </div>
+
+  <div class="zoom-control" id="zoomControl">
+    <button id="themeToggle" title="Cambiar tema"></button>
+    <span class="ctrl-sep"></span>
+    <button id="zoomOut" title="Alejar">–</button>
+    <button id="zoomReset" title="Restablecer a 100%">100%</button>
+    <button id="zoomIn" title="Acercar">+</button>
+    <span class="ctrl-sep"></span>
+    <button id="zoomToggle" title="Ocultar controles">×</button>
+  </div>
+  <button class="zoom-fab" id="zoomFab" title="Mostrar controles de zoom" style="display:none;">🔍</button>
+
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h2>Tus temas</h2>
+      <p>Un tema por línea. Cada apartado tiene su propia lista.</p>
+      <div class="modal-tabs" id="modalTabs">
+        <button class="active" data-list="simple">🧠 Simples</button>
+        <button data-list="deep">🔍 Profundos</button>
+      </div>
+      <div class="category-hint" id="categoryHint"></div>
+      <textarea id="topicsAreaSimple" spellcheck="false"></textarea>
+      <textarea id="topicsAreaDeep" spellcheck="false" style="display:none;"></textarea>
+      <div class="modal-toggle">
+        <span>No repetir un tema hasta agotar la lista</span>
+        <div class="switch on" id="noRepeatSwitch"></div>
+      </div>
+      <div class="modal-segment">
+        <span>Duración de la investigación</span>
+        <div class="segment" id="researchSegment">
+          <button data-min="5">5 min</button>
+          <button data-min="15">15 min</button>
+          <button data-min="30">30 min</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span class="count" id="areaCount">0 temas</span>
+        <div class="btns">
+          <button id="cancelEdit">Cancelar</button>
+          <button class="primary" id="saveEdit">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(async function(){
+  "use strict";
+
+  var LEGACY_TOPICS_KEY = "ruleta_temas_v2";
+  var LEGACY_USED_KEY = "ruleta_usados_v2";
+  var TOPICS_KEY_DEEP = "ruleta_temas_deep_v1";
+  var USED_KEY_DEEP = "ruleta_usados_deep_v1";
+  var CATEGORY_KEY = "ruleta_categoria_simple_v1";
+  var NOREPEAT_KEY = "ruleta_norepeat_v2";
+  var RESEARCH_MIN_KEY = "ruleta_research_min_v1";
+  var MODE_KEY = "ruleta_mode_v1";
+  var SPEAK_SECONDS = 60;
+
+  // Los temas ya no viven aquí en el código: se cargan desde temas.json
+  // (archivo separado que se puede editar sin tocar esta lógica).
+  var DEFAULT_TOPICS_DEEP = [];
+  var simpleCategories = [];   // [{id, label, icon, topics}]
+  var simpleCategoriesById = {};
+
+  try{
+    var temasRes = await fetch("temas.json");
+    var temasData = await temasRes.json();
+    DEFAULT_TOPICS_DEEP = Array.isArray(temasData.deep) ? temasData.deep : [];
+    simpleCategories = (temasData.simple && Array.isArray(temasData.simple.categories))
+      ? temasData.simple.categories : [];
+    simpleCategories.forEach(function(cat){ simpleCategoriesById[cat.id] = cat; });
+  }catch(e){
+    console.error("No se pudo cargar temas.json:", e);
+  }
+
+  // ---------- categoría activa (modo simple) ----------
+  function loadSelectedCategory(){
+    var v = localStorage.getItem(CATEGORY_KEY);
+    if(v && simpleCategoriesById[v]) return v;
+    return simpleCategories.length ? simpleCategories[0].id : "general";
+  }
+  function saveSelectedCategory(v){ localStorage.setItem(CATEGORY_KEY, v); }
+  var selectedCategory = loadSelectedCategory();
+
+  function keyTopics(mode){
+    return mode === "simple" ? ("ruleta_temas_simple_" + selectedCategory + "_v1") : TOPICS_KEY_DEEP;
+  }
+  function keyUsed(mode){
+    return mode === "simple" ? ("ruleta_usados_simple_" + selectedCategory + "_v1") : USED_KEY_DEEP;
+  }
+
+  function defaultsFor(mode){
+    if(mode === "simple"){
+      var cat = simpleCategoriesById[selectedCategory];
+      return cat ? cat.topics.slice() : [];
+    }
+    return DEFAULT_TOPICS_DEEP.slice();
+  }
+
+  function loadTopics(mode){
+    try{
+      var raw = localStorage.getItem(keyTopics(mode));
+      if(raw){
+        var arr = JSON.parse(raw);
+        if(Array.isArray(arr) && arr.length) return arr;
+      }
+      if(mode === "deep"){
+        var legacy = localStorage.getItem(LEGACY_TOPICS_KEY);
+        if(legacy){
+          var larr = JSON.parse(legacy);
+          if(Array.isArray(larr) && larr.length) return larr;
+        }
+      }
+      return defaultsFor(mode);
+    }catch(e){ return defaultsFor(mode); }
+  }
+  function saveTopicsFor(mode, arr){ localStorage.setItem(keyTopics(mode), JSON.stringify(arr)); }
+  function loadUsedFor(mode){
+    try{
+      var raw = localStorage.getItem(keyUsed(mode));
+      if(raw){ var arr = JSON.parse(raw); if(Array.isArray(arr)) return arr; }
+      if(mode === "deep"){
+        var legacy = localStorage.getItem(LEGACY_USED_KEY);
+        if(legacy){ var larr = JSON.parse(legacy); if(Array.isArray(larr)) return larr; }
+      }
+      return [];
+    }catch(e){ return []; }
+  }
+  function saveUsedFor(mode, arr){ localStorage.setItem(keyUsed(mode), JSON.stringify(arr)); }
+  function loadNoRepeat(){
+    var v = localStorage.getItem(NOREPEAT_KEY);
+    return v === null ? true : v === "1";
+  }
+  function saveNoRepeat(v){ localStorage.setItem(NOREPEAT_KEY, v ? "1" : "0"); }
+  function loadResearchMinutes(){
+    var v = parseInt(localStorage.getItem(RESEARCH_MIN_KEY), 10);
+    return (v === 5 || v === 15 || v === 30) ? v : 15;
+  }
+  function saveResearchMinutes(v){ localStorage.setItem(RESEARCH_MIN_KEY, String(v)); }
+  function loadMode(){
+    var v = localStorage.getItem(MODE_KEY);
+    return (v === "simple" || v === "deep") ? v : "deep";
+  }
+  function saveMode(v){ localStorage.setItem(MODE_KEY, v); }
+
+  var mode = loadMode();
+  var topicsByMode = { simple: loadTopics("simple"), deep: loadTopics("deep") };
+  var usedByMode = { simple: loadUsedFor("simple"), deep: loadUsedFor("deep") };
+  var currentTopicByMode = { simple: null, deep: null };
+  var noRepeat = loadNoRepeat();
+  var researchMinutes = loadResearchMinutes();
+
+  // ---------- audio ----------
+  var actx = null;
+  function ctx(){
+    if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if(actx.state === "suspended") actx.resume();
+    return actx;
+  }
+  function tick(progress){
+    var c = ctx();
+    var p = typeof progress === "number" ? progress : 0;
+    var dur = 0.022;
+    var bufferSize = Math.max(1, Math.floor(c.sampleRate * dur));
+    var buffer = c.createBuffer(1, bufferSize, c.sampleRate);
+    var data = buffer.getChannelData(0);
+    for(var i = 0; i < bufferSize; i++){
+      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 1.7);
+    }
+    var noise = c.createBufferSource();
+    noise.buffer = buffer;
+    var filter = c.createBiquadFilter();
+    filter.type = "bandpass";
+    filter.frequency.value = 2200 + p * 1400; // brighter as it settles, like an iOS wheel detent
+    filter.Q.value = 3.2;
+    var g = c.createGain();
+    g.gain.setValueAtTime(1.0, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+    noise.connect(filter); filter.connect(g); g.connect(c.destination);
+    noise.start();
+
+    // low body layer for extra presence/loudness
+    var body = c.createOscillator();
+    var bodyGain = c.createGain();
+    body.type = "sine";
+    body.frequency.value = 1400 + p * 500;
+    bodyGain.gain.setValueAtTime(0.12, c.currentTime);
+    bodyGain.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + dur * 1.1);
+    body.connect(bodyGain); bodyGain.connect(c.destination);
+    body.start(); body.stop(c.currentTime + dur * 1.2);
+  }
+  function startCue(){
+    var c = ctx();
+    var notes = [523.25, 659.25, 783.99, 1046.5];
+    notes.forEach(function(freq, i){
+      var o = c.createOscillator(), g = c.createGain();
+      o.type = i === notes.length - 1 ? "sine" : "triangle";
+      o.frequency.value = freq;
+      var t0 = c.currentTime + i * 0.065;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(i === notes.length - 1 ? 0.13 : 0.1, t0 + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.28);
+      o.connect(g); g.connect(c.destination);
+      o.start(t0); o.stop(t0 + 0.3);
+    });
+  }
+  function ding(){
+    var c = ctx();
+    [660, 990].forEach(function(freq, i){
+      var o = c.createOscillator(), g = c.createGain();
+      o.type = "sine"; o.frequency.value = freq;
+      var t0 = c.currentTime + i * 0.09;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.09, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.5);
+      o.connect(g); g.connect(c.destination);
+      o.start(t0); o.stop(t0 + 0.55);
+    });
+  }
+  function alarm(){
+    var c = ctx();
+    for(var i=0;i<3;i++){
+      (function(i){
+        var o = c.createOscillator(), g = c.createGain();
+        o.type = "sine"; o.frequency.value = 1046.5;
+        var t0 = c.currentTime + i * 0.28;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(0.13, t0 + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.22);
+        o.connect(g); g.connect(c.destination);
+        o.start(t0); o.stop(t0 + 0.25);
+      })(i);
+    }
+  }
+
+  // ---------- elements ----------
+  var resultStage = document.getElementById("resultStage");
+  var timerStage = document.getElementById("timerStage");
+  var eyebrowIdle = document.getElementById("eyebrowIdle");
+  var topicText = document.getElementById("topicText");
+  var rowSingle = document.getElementById("rowSingle");
+  var rowFull = document.getElementById("rowFull");
+
+  var timerTopic = document.getElementById("timerTopic");
+  var phaseTag = document.getElementById("phaseTag");
+  var circleDigits = document.getElementById("circleDigits");
+  var timerSub = document.getElementById("timerSub");
+  var timerButtons = document.getElementById("timerButtons");
+  var ringProgress = document.getElementById("ringProgress");
+  var RING_CIRCUMFERENCE = 2 * Math.PI * 105;
+  ringProgress.style.strokeDasharray = RING_CIRCUMFERENCE;
+
+  function setRing(fractionRemaining, animated){
+    ringProgress.style.transition = animated === false ? "none" : "stroke-dashoffset 1s linear, stroke .3s";
+    ringProgress.style.strokeDashoffset = RING_CIRCUMFERENCE * (1 - fractionRemaining);
+  }
+
+  function pick(list){ return list[Math.floor(Math.random()*list.length)]; }
+
+  function poolRemaining(){
+    var list = topicsByMode[mode];
+    if(!noRepeat) return list.slice();
+    var usedList = usedByMode[mode];
+    var remaining = list.filter(function(t){ return usedList.indexOf(t) === -1; });
+    if(remaining.length === 0){
+      usedByMode[mode] = [];
+      saveUsedFor(mode, usedByMode[mode]);
+      remaining = list.slice();
+    }
+    return remaining;
+  }
+
+  // ---------- spin (text-cycle, no scrolling wheel) ----------
+  var spinning = false;
+
+  function computeDelay(i, total){
+    var base = 55, max = 230;
+    var t = i / (total - 1);
+    var eased = t * t;
+    return base + (max - base) * eased;
+  }
+
+  function setSpinningUI(isSpinning){
+    rowSingle.classList.toggle("disabled", isSpinning);
+    rowFull.classList.toggle("disabled", isSpinning);
+  }
+
+  function spin(){
+    var list = topicsByMode[mode];
+    if(spinning || list.length === 0) return;
+    spinning = true;
+    setSpinningUI(true);
+
+    var remaining = poolRemaining();
+    var target = pick(remaining);
+    var total = 20 + Math.floor(Math.random()*6);
+    var lastShown = null;
+
+    function step(i){
+      if(i >= total){
+        topicText.textContent = target;
+        topicText.classList.remove("placeholder");
+        topicText.classList.add("pulse");
+        setTimeout(function(){ topicText.classList.remove("pulse"); }, 150);
+        ding();
+        if(noRepeat){ usedByMode[mode].push(target); saveUsedFor(mode, usedByMode[mode]); }
+        currentTopicByMode[mode] = target;
+        spinning = false;
+        setSpinningUI(false);
+        rowSingle.style.display = "none";
+        rowFull.style.display = "flex";
+        return;
+      }
+      var word = target;
+      if(i < total - 1){
+        do{ word = pick(list); } while(word === lastShown && list.length > 1);
+      }
+      lastShown = word;
+      topicText.innerHTML = "";
+      topicText.textContent = word;
+      topicText.classList.remove("pulse");
+      void topicText.offsetWidth;
+      topicText.classList.add("pulse");
+      tick(i / (total - 1));
+      setTimeout(function(){ step(i+1); }, computeDelay(i, total));
+    }
+    step(0);
+  }
+
+  document.getElementById("spinBtnFirst").addEventListener("click", function(){ ctx(); spin(); });
+  document.getElementById("spinBtnAgain").addEventListener("click", function(){ ctx(); spin(); });
+
+  // ---------- timer flow ----------
+  var timerInterval = null;
+  var secondsLeft = 0;
+  var phase = null; // "research" | "ready" | "speak" | "finished"
+
+  function formatTime(s){
+    var m = Math.floor(s/60), sec = s%60;
+    return m+":"+(sec<10?"0":"")+sec;
+  }
+  function stopTicking(){ if(timerInterval){ clearInterval(timerInterval); timerInterval = null; } }
+
+  function setPhaseColor(color){
+    document.documentElement.style.setProperty("--phase-color", color);
+  }
+
+  function showTimerStage(){
+    resultStage.style.display = "none";
+    timerStage.style.display = "flex";
+    timerTopic.textContent = currentTopicByMode[mode];
+  }
+  function backToResult(){
+    stopTicking();
+    phase = null;
+    timerStage.style.display = "none";
+    resultStage.style.display = "flex";
+  }
+
+  function goResearching(){
+    phase = "research";
+    showTimerStage();
+    setPhaseColor("var(--research)");
+    phaseTag.textContent = "investigando";
+    var totalSeconds = researchMinutes * 60;
+    secondsLeft = totalSeconds;
+    circleDigits.textContent = formatTime(secondsLeft);
+    setRing(1, false);
+    timerSub.innerHTML = "Investiga.";
+    timerButtons.innerHTML =
+      '<button class="btn btn-primary" id="doneResearch" style="flex:0 0 auto; padding:14px 32px;">Terminé de investigar</button>' +
+      '<button class="link-btn" id="closeResearch">Cerrar</button>';
+    document.getElementById("doneResearch").addEventListener("click", function(){ stopTicking(); goReady(); });
+    document.getElementById("closeResearch").addEventListener("click", backToResult);
+    stopTicking();
+    timerInterval = setInterval(function(){
+      secondsLeft--;
+      if(secondsLeft <= 0){
+        stopTicking(); alarm();
+        setRing(0);
+        setTimeout(goReady, 400);
+        return;
+      }
+      circleDigits.textContent = formatTime(secondsLeft);
+      setRing(secondsLeft / totalSeconds);
+    }, 1000);
+  }
+
+  function goReady(){
+    phase = "ready";
+    setPhaseColor("var(--accent)");
+    phaseTag.textContent = "";
+    circleDigits.textContent = formatTime(SPEAK_SECONDS);
+    setRing(1, false);
+    timerSub.innerHTML = mode === "simple"
+      ? "Tema listo.<br><span class='l2'>1 min para improvisar.</span>"
+      : "Investigación terminada.<br><span class='l2'>Sigue: 1 min para explicar.</span>";
+    timerButtons.innerHTML =
+      '<button class="btn btn-primary" id="readySpeak" style="flex:0 0 auto; padding:14px 32px;">Estoy listo para explicar</button>' +
+      '<button class="link-btn" id="closeReady">Cerrar</button>';
+    document.getElementById("readySpeak").addEventListener("click", function(){ ctx(); startCue(); goSpeak(); });
+    document.getElementById("closeReady").addEventListener("click", backToResult);
+  }
+
+  function goSpeak(){
+    phase = "speak";
+    setPhaseColor("var(--accent)");
+    phaseTag.textContent = "explicando";
+    var totalSeconds = SPEAK_SECONDS;
+    secondsLeft = totalSeconds;
+    circleDigits.textContent = formatTime(secondsLeft);
+    setRing(1, false);
+    timerSub.innerHTML = "Habla.";
+    timerButtons.innerHTML =
+      '<button class="btn btn-primary" id="finishSpeak" style="flex:0 0 auto; padding:14px 40px;">Terminar</button>' +
+      '<button class="link-btn" id="closeSpeak">Cerrar</button>';
+    document.getElementById("finishSpeak").addEventListener("click", function(){ stopTicking(); goFinished(); });
+    document.getElementById("closeSpeak").addEventListener("click", backToResult);
+    stopTicking();
+    timerInterval = setInterval(function(){
+      secondsLeft--;
+      if(secondsLeft <= 0){
+        stopTicking(); alarm();
+        circleDigits.textContent = "0:00";
+        setRing(0);
+        setTimeout(goFinished, 400);
+        return;
+      }
+      circleDigits.textContent = formatTime(secondsLeft);
+      setRing(secondsLeft / totalSeconds);
+    }, 1000);
+  }
+
+  function goFinished(){
+    phase = "finished";
+    phaseTag.textContent = "";
+    circleDigits.textContent = "0:00";
+    setRing(0);
+    timerSub.innerHTML = "¡Tiempo!";
+    timerButtons.innerHTML =
+      '<button class="btn btn-primary" id="backToTopic" style="flex:0 0 auto; padding:14px 40px;">Volver al tema</button>';
+    document.getElementById("backToTopic").addEventListener("click", backToResult);
+  }
+
+  document.getElementById("startResearch").addEventListener("click", function(){ ctx(); goResearching(); });
+  document.getElementById("startSimpleSpeak").addEventListener("click", function(){
+    ctx();
+    showTimerStage();
+    goReady();
+  });
+
+  // ---------- editor ----------
+  var overlay = document.getElementById("overlay");
+  var topicsAreaSimple = document.getElementById("topicsAreaSimple");
+  var topicsAreaDeep = document.getElementById("topicsAreaDeep");
+  var modalTabs = document.getElementById("modalTabs");
+  var areaCount = document.getElementById("areaCount");
+  var noRepeatSwitch = document.getElementById("noRepeatSwitch");
+  var researchSegment = document.getElementById("researchSegment");
+  var switchState = noRepeat;
+  var researchMinState = researchMinutes;
+  var activeTab = "simple";
+
+  function textareaFor(tab){ return tab === "simple" ? topicsAreaSimple : topicsAreaDeep; }
+
+  function updateAreaCount(){
+    var lines = textareaFor(activeTab).value.split("\n").map(function(s){return s.trim();}).filter(Boolean);
+    areaCount.textContent = lines.length + " temas";
+  }
+
+  var categoryHint = document.getElementById("categoryHint");
+  function renderTabs(){
+    modalTabs.querySelectorAll("button").forEach(function(b){
+      b.classList.toggle("active", b.dataset.list === activeTab);
+    });
+    topicsAreaSimple.style.display = activeTab === "simple" ? "block" : "none";
+    topicsAreaDeep.style.display = activeTab === "deep" ? "block" : "none";
+    if(activeTab === "simple"){
+      var cat = simpleCategoriesById[selectedCategory];
+      categoryHint.textContent = "Editando categoría: " + (cat ? (cat.icon + " " + cat.label) : "General") + " — cambia de categoría en la pantalla principal antes de abrir el editor si quieres editar otra.";
+      categoryHint.style.display = "block";
+    }else{
+      categoryHint.style.display = "none";
+    }
+    updateAreaCount();
+  }
+  modalTabs.addEventListener("click", function(e){
+    var btn = e.target.closest("button");
+    if(!btn) return;
+    activeTab = btn.dataset.list;
+    renderTabs();
+  });
+
+  function renderSegment(){
+    var btns = researchSegment.querySelectorAll("button");
+    btns.forEach(function(b){
+      b.classList.toggle("on", parseInt(b.dataset.min, 10) === researchMinState);
+    });
+  }
+  researchSegment.addEventListener("click", function(e){
+    var btn = e.target.closest("button");
+    if(!btn) return;
+    researchMinState = parseInt(btn.dataset.min, 10);
+    renderSegment();
+  });
+
+  function openEditor(){
+    activeTab = mode;
+    topicsAreaSimple.value = topicsByMode.simple.join("\n");
+    topicsAreaDeep.value = topicsByMode.deep.join("\n");
+    renderTabs();
+    switchState = noRepeat;
+    noRepeatSwitch.classList.toggle("on", switchState);
+    researchMinState = researchMinutes;
+    renderSegment();
+    overlay.classList.add("show");
+  }
+  function closeEditor(){ overlay.classList.remove("show"); }
+
+  document.getElementById("openEditor1").addEventListener("click", openEditor);
+  document.getElementById("openEditor2").addEventListener("click", openEditor);
+  document.getElementById("cancelEdit").addEventListener("click", closeEditor);
+  overlay.addEventListener("click", function(e){ if(e.target === overlay) closeEditor(); });
+  topicsAreaSimple.addEventListener("input", updateAreaCount);
+  topicsAreaDeep.addEventListener("input", updateAreaCount);
+  noRepeatSwitch.addEventListener("click", function(){
+    switchState = !switchState;
+    noRepeatSwitch.classList.toggle("on", switchState);
+  });
+
+  document.getElementById("saveEdit").addEventListener("click", function(){
+    var linesSimple = topicsAreaSimple.value.split("\n").map(function(s){return s.trim();}).filter(Boolean);
+    var linesDeep = topicsAreaDeep.value.split("\n").map(function(s){return s.trim();}).filter(Boolean);
+    if(linesSimple.length === 0 || linesDeep.length === 0){
+      alert("Cada lista necesita al menos un tema.");
+      return;
+    }
+    topicsByMode.simple = linesSimple;
+    topicsByMode.deep = linesDeep;
+    saveTopicsFor("simple", linesSimple);
+    saveTopicsFor("deep", linesDeep);
+    usedByMode.simple = usedByMode.simple.filter(function(t){ return linesSimple.indexOf(t) !== -1; });
+    usedByMode.deep = usedByMode.deep.filter(function(t){ return linesDeep.indexOf(t) !== -1; });
+    saveUsedFor("simple", usedByMode.simple);
+    saveUsedFor("deep", usedByMode.deep);
+    noRepeat = switchState;
+    saveNoRepeat(noRepeat);
+    researchMinutes = researchMinState;
+    saveResearchMinutes(researchMinutes);
+    closeEditor();
+  });
+
+  // ---------- mode toggle ----------
+  var modeRow = document.getElementById("modeRow");
+  var subtitleText = document.getElementById("subtitleText");
+  var SUBTITLES = {
+    simple: "Gira un tema simple e improvisa al momento.",
+    deep: "Gira un tema, investiga, y explica cuando estés listo."
+  };
+
+  // ---------- category dropdown (solo modo simple) ----------
+  var categoryDropdown = document.getElementById("categoryDropdown");
+  var categoryBtn = document.getElementById("categoryBtn");
+  var categoryBtnIcon = document.getElementById("categoryBtnIcon");
+  var categoryBtnLabel = document.getElementById("categoryBtnLabel");
+  var categoryMenu = document.getElementById("categoryMenu");
+
+  function renderCategoryButton(){
+    var cat = simpleCategoriesById[selectedCategory];
+    categoryBtnIcon.textContent = cat ? (cat.icon || "") : "";
+    categoryBtnLabel.textContent = cat ? cat.label : "General";
+  }
+  function renderCategoryMenu(){
+    categoryMenu.innerHTML = "";
+    simpleCategories.forEach(function(cat){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "category-option" + (cat.id === selectedCategory ? " active" : "");
+      b.dataset.cat = cat.id;
+      b.innerHTML = "<span>" + (cat.icon || "") + "</span><span>" + cat.label + "</span>";
+      categoryMenu.appendChild(b);
+    });
+  }
+  function closeCategoryMenu(){ categoryDropdown.classList.remove("open"); }
+
+  categoryBtn.addEventListener("click", function(e){
+    e.stopPropagation();
+    if(spinning) return;
+    categoryDropdown.classList.toggle("open");
+  });
+  categoryMenu.addEventListener("click", function(e){
+    var btn = e.target.closest(".category-option");
+    if(!btn) return;
+    closeCategoryMenu();
+    var newCat = btn.dataset.cat;
+    if(newCat === selectedCategory) return;
+    selectedCategory = newCat;
+    saveSelectedCategory(selectedCategory);
+    topicsByMode.simple = loadTopics("simple");
+    usedByMode.simple = loadUsedFor("simple");
+    currentTopicByMode.simple = null;
+    renderCategoryButton();
+    renderCategoryMenu();
+    if(mode === "simple") renderMode();
+  });
+  document.addEventListener("click", function(e){
+    if(!categoryDropdown.contains(e.target)) closeCategoryMenu();
+  });
+
+  renderCategoryButton();
+  renderCategoryMenu();
+
+  function renderMode(){
+    var btns = modeRow.querySelectorAll(".mode-btn");
+    btns.forEach(function(b){ b.classList.toggle("active", b.dataset.mode === mode); });
+    subtitleText.textContent = SUBTITLES[mode];
+    categoryDropdown.style.display = mode === "simple" ? "block" : "none";
+    if(mode !== "simple") closeCategoryMenu();
+    document.getElementById("startResearch").style.display = mode === "simple" ? "none" : "";
+    document.getElementById("startSimpleSpeak").style.display = mode === "simple" ? "" : "none";
+    var t = currentTopicByMode[mode];
+    if(t){
+      topicText.textContent = t;
+      topicText.classList.remove("placeholder");
+      rowSingle.style.display = "none";
+      rowFull.style.display = "flex";
+    }else{
+      topicText.innerHTML = '<span class="placeholder">presiona girar para elegir</span>';
+      rowSingle.style.display = "flex";
+      rowFull.style.display = "none";
+    }
+  }
+
+  modeRow.addEventListener("click", function(e){
+    var btn = e.target.closest(".mode-btn");
+    if(!btn || spinning) return;
+    var next = btn.dataset.mode;
+    if(next === mode) return;
+    mode = next;
+    saveMode(mode);
+    renderMode();
+  });
+
+  renderMode();
+  setPhaseColor("var(--accent)");
+
+  // ---------- zoom control ----------
+  var appRoot = document.getElementById("appRoot");
+  var zoomControl = document.getElementById("zoomControl");
+  var zoomFab = document.getElementById("zoomFab");
+  var zoomResetBtn = document.getElementById("zoomReset");
+  var ZOOM_KEY = "ruleta_zoom_v1";
+  var ZOOM_MIN = 0.6, ZOOM_MAX = 2.5, ZOOM_STEP = 0.1;
+  var zoomLevel = parseFloat(localStorage.getItem(ZOOM_KEY));
+  if(!(zoomLevel >= ZOOM_MIN && zoomLevel <= ZOOM_MAX)) zoomLevel = 1;
+
+  function applyZoom(){
+    appRoot.style.transform = "scale(" + zoomLevel.toFixed(2) + ")";
+    zoomResetBtn.textContent = Math.round(zoomLevel * 100) + "%";
+    localStorage.setItem(ZOOM_KEY, zoomLevel);
+  }
+  function zoomBy(delta){
+    zoomLevel = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, +(zoomLevel + delta).toFixed(2)));
+    applyZoom();
+  }
+
+  document.getElementById("zoomIn").addEventListener("click", function(){ zoomBy(ZOOM_STEP); });
+  document.getElementById("zoomOut").addEventListener("click", function(){ zoomBy(-ZOOM_STEP); });
+  zoomResetBtn.addEventListener("click", function(){ zoomLevel = 1; applyZoom(); });
+  document.getElementById("zoomToggle").addEventListener("click", function(){
+    zoomControl.style.display = "none";
+    zoomFab.style.display = "flex";
+  });
+  zoomFab.addEventListener("click", function(){
+    zoomControl.style.display = "flex";
+    zoomFab.style.display = "none";
+  });
+  document.addEventListener("keydown", function(e){
+    var tag = document.activeElement ? document.activeElement.tagName : "";
+    if(tag === "TEXTAREA" || tag === "INPUT" || overlay.classList.contains("show")) return;
+    if(e.key === "+" || e.key === "="){ zoomBy(ZOOM_STEP); }
+    else if(e.key === "-" || e.key === "_"){ zoomBy(-ZOOM_STEP); }
+    else if(e.key === "0"){ zoomLevel = 1; applyZoom(); }
+  });
+
+  applyZoom();
+
+  // ---------- theme toggle ----------
+  var THEME_KEY = "ruleta_theme_v1";
+  var themeToggleBtn = document.getElementById("themeToggle");
+  var theme = localStorage.getItem(THEME_KEY) === "dark" ? "dark" : "light";
+  var SUN_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="1.5" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22.5"></line><line x1="4.2" y1="4.2" x2="5.9" y2="5.9"></line><line x1="18.1" y1="18.1" x2="19.8" y2="19.8"></line><line x1="1.5" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22.5" y2="12"></line><line x1="4.2" y1="19.8" x2="5.9" y2="18.1"></line><line x1="18.1" y1="5.9" x2="19.8" y2="4.2"></line></svg>';
+  var MOON_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20.6 15.3A8.7 8.7 0 0 1 8.7 3.4a9 9 0 1 0 11.9 11.9z"></path></svg>';
+
+  function applyTheme(){
+    document.documentElement.setAttribute("data-theme", theme);
+    themeToggleBtn.innerHTML = theme === "dark" ? SUN_ICON : MOON_ICON;
+    themeToggleBtn.title = theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro";
+    localStorage.setItem(THEME_KEY, theme);
+  }
+  themeToggleBtn.addEventListener("click", function(){
+    theme = theme === "dark" ? "light" : "dark";
+    applyTheme();
+  });
+  applyTheme();
+})();
+</script>
+
+<!-- Botón flotante de Ko-fi: abre el panel de apoyo encima de la página, sin salir del sitio.
+     Reemplaza TU_USUARIO por tu nombre de usuario real de Ko-fi. -->
+<script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
+<script>
+  kofiWidgetOverlay.draw('wvxam', {
+    'type': 'floating-chat',
+    'floating-chat.donateButton.text': 'Apóyame',
+    'floating-chat.donateButton.background-color': '#e0995f',
+    'floating-chat.donateButton.text-color': '#161008'
+  });
+</script>
+</body>
+</html>
