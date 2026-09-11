@@ -205,11 +205,6 @@
   }
   .btn-icon:hover{ border-color: var(--accent); color: var(--text); }
 
-  /* Editor de temas oculto en la versión pública: la fuente de verdad ahora es
-     temas.json. Borra esta regla si algún día quieres reactivar el editor
-     en pantalla (por ejemplo, para una versión de uso solo para ti). */
-  #openEditor1, #openEditor2{ display:none !important; }
-
   .mode-row{
     display:flex; gap:4px;
     background: var(--pill-bg);
@@ -373,6 +368,31 @@
   .modal-footer button.primary{ background: var(--accent); color:#161008; border-color:var(--accent); }
   .modal-footer button:hover{ opacity:0.9; }
 
+  .settings-row{ margin-top:16px; }
+  .settings-row:first-of-type{ margin-top:2px; }
+  .settings-row-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:9px; }
+  .settings-row-head span{ font-size:11.5px; font-weight:700; letter-spacing:0.6px; color:var(--accent); text-transform:uppercase; }
+  .settings-row-head b{ font-size:15px; color:var(--text); font-weight:700; }
+  .settings-row-minmax{ display:flex; justify-content:space-between; font-size:11.5px; color:var(--text-dim); margin-top:5px; }
+  .settings-row-note{ font-size:11.5px; color:var(--text-dim); margin-top:5px; }
+  .settings-saved-note{ font-size:12px; color:var(--text-dim); text-align:center; margin-top:16px; }
+
+  input[type="range"]{
+    -webkit-appearance:none; appearance:none; width:100%; height:6px;
+    background: var(--switch-track); border-radius:99px; outline:none; cursor:pointer; display:block;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none; width:20px; height:20px; border-radius:50%;
+    background: var(--accent); border:3px solid var(--surface); box-shadow:0 1px 4px rgba(0,0,0,0.35); cursor:pointer;
+  }
+  input[type="range"]::-moz-range-thumb{
+    width:20px; height:20px; border-radius:50%; background: var(--accent);
+    border:3px solid var(--surface); box-shadow:0 1px 4px rgba(0,0,0,0.35); cursor:pointer;
+  }
+  input[type="range"]::-moz-range-track{
+    background: var(--switch-track); height:6px; border-radius:99px;
+  }
+
   footer{ margin-top:10px; font-size:11.5px; color: var(--text-dim); opacity:0.6; text-align:center; }
 
   @media (max-width:420px){
@@ -416,14 +436,14 @@
 
     <div class="action-row single" id="rowSingle">
       <button class="btn btn-primary" id="spinBtnFirst" style="flex:0 0 auto; padding:14px 46px;">Girar</button>
-      <button class="btn-icon" id="openEditor1" title="Editar temas"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>
+      <button class="btn-icon" id="openSettings1" title="Configuración"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>
     </div>
 
     <div class="action-row" id="rowFull" style="display:none;">
       <button class="btn btn-primary" id="spinBtnAgain">Girar de nuevo</button>
       <button class="btn btn-outline" id="startResearch">Iniciar investigación</button>
       <button class="btn btn-outline" id="startSimpleSpeak" style="display:none;">Explicar</button>
-      <button class="btn-icon" id="openEditor2" title="Editar temas"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>
+      <button class="btn-icon" id="openSettings2" title="Configuración"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>
     </div>
   </div>
 
@@ -492,6 +512,38 @@
     </div>
   </div>
 
+  <div class="overlay" id="settingsOverlay">
+    <div class="modal" style="max-width:420px;">
+      <h2>Configuración</h2>
+      <p>Duración de los temporizadores, en minutos.</p>
+
+      <div class="settings-row">
+        <div class="settings-row-head"><span>Hablar</span><b id="speakValue">1 min</b></div>
+        <input type="range" id="speakRange" min="1" max="10" step="1" value="1">
+        <div class="settings-row-minmax"><span>1 min</span><span>10 min</span></div>
+      </div>
+
+      <div class="settings-row">
+        <div class="settings-row-head"><span>Investigar</span><b id="researchValue">15 min</b></div>
+        <input type="range" id="researchRange" min="1" max="60" step="1" value="15">
+        <div class="settings-row-minmax"><span>1 min</span><span>60 min</span></div>
+        <div class="settings-row-note">Solo aplica al modo investigación profunda</div>
+      </div>
+
+      <div class="modal-toggle">
+        <span>Silenciar efectos de sonido</span>
+        <div class="switch" id="muteSwitch"></div>
+      </div>
+      <div class="modal-toggle" style="border-top:none; padding-top:0; margin-top:0;">
+        <span>No repetir un tema hasta agotar la lista</span>
+        <div class="switch on" id="noRepeatSwitch2"></div>
+      </div>
+
+      <div class="settings-saved-note">Guardado para la próxima vez.</div>
+      <button class="btn btn-primary" id="settingsDone" style="width:100%; margin-top:12px;">Listo</button>
+    </div>
+  </div>
+
 <script>
 (async function(){
   "use strict";
@@ -503,8 +555,9 @@
   var CATEGORY_KEY = "ruleta_categoria_simple_v1";
   var NOREPEAT_KEY = "ruleta_norepeat_v2";
   var RESEARCH_MIN_KEY = "ruleta_research_min_v1";
+  var SPEAK_MIN_KEY = "ruleta_speak_min_v1";
+  var MUTE_KEY = "ruleta_mute_v1";
   var MODE_KEY = "ruleta_mode_v1";
-  var SPEAK_SECONDS = 60;
 
   // Los temas ya no viven aquí en el código: se cargan desde temas.json
   // (archivo separado que se puede editar sin tocar esta lógica).
@@ -584,9 +637,16 @@
   function saveNoRepeat(v){ localStorage.setItem(NOREPEAT_KEY, v ? "1" : "0"); }
   function loadResearchMinutes(){
     var v = parseInt(localStorage.getItem(RESEARCH_MIN_KEY), 10);
-    return (v === 5 || v === 15 || v === 30) ? v : 15;
+    return (v && v > 0) ? v : 15;
   }
   function saveResearchMinutes(v){ localStorage.setItem(RESEARCH_MIN_KEY, String(v)); }
+  function loadSpeakMinutes(){
+    var v = parseInt(localStorage.getItem(SPEAK_MIN_KEY), 10);
+    return (v && v > 0) ? v : 1;
+  }
+  function saveSpeakMinutes(v){ localStorage.setItem(SPEAK_MIN_KEY, String(v)); }
+  function loadMute(){ return localStorage.getItem(MUTE_KEY) === "1"; }
+  function saveMute(v){ localStorage.setItem(MUTE_KEY, v ? "1" : "0"); }
   function loadMode(){
     var v = localStorage.getItem(MODE_KEY);
     return (v === "simple" || v === "deep") ? v : "deep";
@@ -599,6 +659,8 @@
   var currentTopicByMode = { simple: null, deep: null };
   var noRepeat = loadNoRepeat();
   var researchMinutes = loadResearchMinutes();
+  var speakMinutes = loadSpeakMinutes();
+  var muted = loadMute();
 
   // ---------- audio ----------
   var actx = null;
@@ -608,6 +670,7 @@
     return actx;
   }
   function tick(progress){
+    if(muted) return;
     var c = ctx();
     var p = typeof progress === "number" ? progress : 0;
     var dur = 0.022;
@@ -640,6 +703,7 @@
     body.start(); body.stop(c.currentTime + dur * 1.2);
   }
   function startCue(){
+    if(muted) return;
     var c = ctx();
     var notes = [523.25, 659.25, 783.99, 1046.5];
     notes.forEach(function(freq, i){
@@ -655,6 +719,7 @@
     });
   }
   function ding(){
+    if(muted) return;
     var c = ctx();
     [660, 990].forEach(function(freq, i){
       var o = c.createOscillator(), g = c.createGain();
@@ -668,6 +733,7 @@
     });
   }
   function alarm(){
+    if(muted) return;
     var c = ctx();
     for(var i=0;i<3;i++){
       (function(i){
@@ -683,6 +749,7 @@
     }
   }
   function researchCue(){
+    if(muted) return;
     // Sonido suave y "de enfoque" para cuando empieza la investigación:
     // dos notas descendentes, cálidas, sin urgencia (distinto al de "listo para explicar").
     var c = ctx();
@@ -856,11 +923,12 @@
     phase = "ready";
     setPhaseColor("var(--accent)");
     phaseTag.textContent = "";
-    circleDigits.textContent = formatTime(SPEAK_SECONDS);
+    circleDigits.textContent = formatTime(speakMinutes * 60);
     setRing(1, false);
+    var speakLabel = speakMinutes + " min";
     timerSub.innerHTML = mode === "simple"
-      ? "Tema listo.<br><span class='l2'>1 min para improvisar.</span>"
-      : "Investigación terminada.<br><span class='l2'>Sigue: 1 min para explicar.</span>";
+      ? "Tema listo.<br><span class='l2'>" + speakLabel + " para improvisar.</span>"
+      : "Investigación terminada.<br><span class='l2'>Sigue: " + speakLabel + " para explicar.</span>";
     timerButtons.innerHTML =
       '<button class="btn btn-primary" id="readySpeak" style="flex:0 0 auto; padding:14px 32px;">Estoy listo para explicar</button>' +
       '<button class="link-btn" id="closeReady">Cerrar</button>';
@@ -872,7 +940,7 @@
     phase = "speak";
     setPhaseColor("var(--accent)");
     phaseTag.textContent = "explicando";
-    var totalSeconds = SPEAK_SECONDS;
+    var totalSeconds = speakMinutes * 60;
     secondsLeft = totalSeconds;
     circleDigits.textContent = formatTime(secondsLeft);
     setRing(1, false);
@@ -983,8 +1051,60 @@
   }
   function closeEditor(){ overlay.classList.remove("show"); }
 
-  document.getElementById("openEditor1").addEventListener("click", openEditor);
-  document.getElementById("openEditor2").addEventListener("click", openEditor);
+  // ---------- panel de configuración (público) ----------
+  var settingsOverlay = document.getElementById("settingsOverlay");
+  var speakRange = document.getElementById("speakRange");
+  var speakValue = document.getElementById("speakValue");
+  var researchRange = document.getElementById("researchRange");
+  var researchValue = document.getElementById("researchValue");
+  var muteSwitch = document.getElementById("muteSwitch");
+  var noRepeatSwitch2 = document.getElementById("noRepeatSwitch2");
+  var settingsMuteState = muted;
+  var settingsNoRepeatState = noRepeat;
+
+  function openSettings(){
+    speakRange.value = speakMinutes;
+    speakValue.textContent = speakMinutes + " min";
+    researchRange.value = researchMinutes;
+    researchValue.textContent = researchMinutes + " min";
+    settingsMuteState = muted;
+    muteSwitch.classList.toggle("on", settingsMuteState);
+    settingsNoRepeatState = noRepeat;
+    noRepeatSwitch2.classList.toggle("on", settingsNoRepeatState);
+    settingsOverlay.classList.add("show");
+  }
+  function closeSettings(){ settingsOverlay.classList.remove("show"); }
+
+  speakRange.addEventListener("input", function(){
+    speakValue.textContent = speakRange.value + " min";
+  });
+  researchRange.addEventListener("input", function(){
+    researchValue.textContent = researchRange.value + " min";
+  });
+  muteSwitch.addEventListener("click", function(){
+    settingsMuteState = !settingsMuteState;
+    muteSwitch.classList.toggle("on", settingsMuteState);
+  });
+  noRepeatSwitch2.addEventListener("click", function(){
+    settingsNoRepeatState = !settingsNoRepeatState;
+    noRepeatSwitch2.classList.toggle("on", settingsNoRepeatState);
+  });
+
+  document.getElementById("settingsDone").addEventListener("click", function(){
+    speakMinutes = parseInt(speakRange.value, 10);
+    saveSpeakMinutes(speakMinutes);
+    researchMinutes = parseInt(researchRange.value, 10);
+    saveResearchMinutes(researchMinutes);
+    muted = settingsMuteState;
+    saveMute(muted);
+    noRepeat = settingsNoRepeatState;
+    saveNoRepeat(noRepeat);
+    closeSettings();
+  });
+  settingsOverlay.addEventListener("click", function(e){ if(e.target === settingsOverlay) closeSettings(); });
+
+  document.getElementById("openSettings1").addEventListener("click", openSettings);
+  document.getElementById("openSettings2").addEventListener("click", openSettings);
   document.getElementById("cancelEdit").addEventListener("click", closeEditor);
   overlay.addEventListener("click", function(e){ if(e.target === overlay) closeEditor(); });
   topicsAreaSimple.addEventListener("input", updateAreaCount);
