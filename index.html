@@ -120,11 +120,15 @@
 
   header{
     width:100%; max-width:560px;
-    display:flex; align-items:center; justify-content:space-between;
-    margin-bottom: 8px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    margin-bottom: 22px;
   }
-  header .brand{ font-size:13px; color: var(--text-dim); letter-spacing:0.2px; }
-  header .brand b{ color: var(--text); font-weight:600; }
+  header .brand{
+    font-size: clamp(34px, 8.5vw, 58px);
+    font-weight:600; color: var(--text); letter-spacing:0.2px;
+    line-height:1.1;
+  }
 
   .stage{
     width:100%; max-width:560px;
@@ -380,7 +384,7 @@
 
   <div id="appRoot">
   <header>
-    <div class="brand">ruleta de <b>temas</b></div>
+    <div class="brand serif">Serendip</div>
   </header>
 
   <div class="stage" id="resultStage">
@@ -432,7 +436,7 @@
     <div class="action-row" id="timerButtons"></div>
   </div>
 
-  <footer>ruleta de temas · gira, investiga, explica</footer>
+  <footer>Serendip · gira, investiga, explica</footer>
   </div>
 
   <div class="zoom-control" id="zoomControl">
@@ -1147,7 +1151,7 @@
      Reemplaza TU_USUARIO por tu nombre de usuario real de Ko-fi. -->
 <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
 <script>
-  kofiWidgetOverlay.draw('wvxam', {
+  kofiWidgetOverlay.draw('TU_USUARIO', {
     'type': 'floating-chat',
     'floating-chat.donateButton.text': 'Apóyame',
     'floating-chat.donateButton.background-color': '#e0995f',
