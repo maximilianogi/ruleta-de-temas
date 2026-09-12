@@ -154,9 +154,18 @@
     font-size: clamp(50px, 6.3vw, 80px);
     font-weight:600; line-height:1.18; max-width:540px;
     margin: 0 0 8px;
-    min-height: 3.9em;
+    height: 3.9em;
     display:flex; align-items:center; justify-content:center;
+    overflow-y:auto; overflow-x:hidden;
+    overflow-wrap:break-word; word-break:break-word; hyphens:auto;
+    -webkit-overflow-scrolling:touch; scroll-behavior:smooth;
+    scrollbar-width:thin; scrollbar-color: var(--text-dim) transparent;
   }
+  .topic-text.overflowing{ align-items:flex-start; }
+  .topic-text.spin-lock{ overflow:hidden !important; }
+  .topic-text::-webkit-scrollbar{ width:5px; }
+  .topic-text::-webkit-scrollbar-thumb{ background: var(--text-dim); border-radius:99px; opacity:0.5; }
+  .topic-text::-webkit-scrollbar-track{ background:transparent; }
   .topic-text .placeholder{ color: var(--text-dim); font-style:Thin; font-weight:100; font-size:0.85em; }
   @keyframes swap{
     0%{ opacity:0.25; transform: scale(0.965); }
@@ -817,11 +826,36 @@
     rowFull.classList.toggle("disabled", isSpinning);
   }
 
+  function fitTopicText(){
+    // 1) intenta encoger la letra (hasta un límite) para que el tema quepa en las 3 líneas.
+    // 2) si ni así cabe, entonces sí activa el modo "deslizar" como último recurso.
+    var box = topicText;
+    box.style.fontSize = "";
+    box.classList.remove("overflowing");
+    box.scrollTop = 0;
+    var natural = parseFloat(window.getComputedStyle(box).fontSize);
+    var size = natural;
+    var minSize = natural * 0.58;
+    var guard = 0;
+    while(box.scrollHeight > box.clientHeight + 1 && size > minSize && guard < 20){
+      size = size * 0.95;
+      box.style.fontSize = size + "px";
+      guard++;
+    }
+    if(box.scrollHeight > box.clientHeight + 1){
+      box.classList.add("overflowing");
+    }
+    box.scrollTop = 0;
+  }
+
   function spin(){
     var list = topicsByMode[mode];
     if(spinning || list.length === 0) return;
     spinning = true;
     setSpinningUI(true);
+    topicText.classList.add("spin-lock");
+    topicText.style.fontSize = "";
+    topicText.classList.remove("overflowing");
 
     var remaining = poolRemaining();
     var target = pick(remaining);
@@ -833,6 +867,8 @@
         topicText.textContent = target;
         topicText.classList.remove("placeholder");
         topicText.classList.add("pulse");
+        topicText.classList.remove("spin-lock");
+        fitTopicText();
         setTimeout(function(){ topicText.classList.remove("pulse"); }, 150);
         ding();
         if(noRepeat){ usedByMode[mode].push(target); saveUsedFor(mode, usedByMode[mode]); }
@@ -1207,10 +1243,13 @@
     if(t){
       topicText.textContent = t;
       topicText.classList.remove("placeholder");
+      fitTopicText();
       rowSingle.style.display = "none";
       rowFull.style.display = "flex";
     }else{
       topicText.innerHTML = '<span class="placeholder">presiona girar para elegir</span>';
+      topicText.style.fontSize = "";
+      topicText.classList.remove("overflowing");
       rowSingle.style.display = "flex";
       rowFull.style.display = "none";
     }
