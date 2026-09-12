@@ -440,7 +440,7 @@
     </div>
 
     <div class="eyebrow" id="eyebrowIdle">tu tema</div>
-    <div class="topic-text serif" id="topicText"><span class="placeholder">presiona girar</span></div>
+    <div class="topic-text serif" id="topicText"><span class="placeholder">presiona girar para elegir</span></div>
 
     <div class="action-row single" id="rowSingle">
       <button class="btn btn-primary" id="spinBtnFirst" style="flex:0 0 auto; padding:14px 46px;">Girar</button>
@@ -1247,7 +1247,7 @@
       rowSingle.style.display = "none";
       rowFull.style.display = "flex";
     }else{
-      topicText.innerHTML = '<span class="placeholder">presiona girar para elegir</span>';
+      topicText.innerHTML = '<span class="placeholder">presiona girar</span>';
       topicText.style.fontSize = "";
       topicText.classList.remove("overflowing");
       rowSingle.style.display = "flex";
