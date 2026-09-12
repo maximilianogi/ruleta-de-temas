@@ -6,9 +6,8 @@
         "label": "General",
         "icon": "✨",
         "topics": [
-          "Redes sociales",
-          "Destino",
-          "Crecimiento personal",
+          "Redes o soledad",
+          "¿Existe el destino?",
           "Libertad",
           "Mentiras necesarias",
           "Cultura de la cancelación",
@@ -18,11 +17,11 @@
           "libre albedrío",
           "Nostalgia romantiza el pasado",
           "La belleza es subjetiva",
-          "Sufrimiento",
+          "Sufrimiento genera crecimiento personal",
           "Odio vende más que amor",
           "Animales tienen derechos humanos",
           "Monogamia",
-          "Talento",
+          "Talentos natos no existen",
           "Soledad",
           "Aceptar la propia mortalidad",
           "Envejecer",
@@ -60,8 +59,7 @@
           "Desinformación",
           "Polarisación",
           "Eugenesia",
-          "Hiperconsumismo",
-          "Infidelidad"
+          "Hiperconsumismo"
         ]
       },
       {
@@ -313,7 +311,7 @@
     "Curva de Peltzman",
     "Paradoja de Parrondo",
     "Juego de la gallina (Chicken game)",
-    "Maldición de la abundancia (o Paradoja de la abundancia)",
+    "Paradoja de la abundancia",
     "Efecto Flynn inverso",
     "Paradoja de Abilene",
     "Cascada informativa",
