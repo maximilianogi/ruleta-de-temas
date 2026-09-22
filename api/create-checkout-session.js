@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
     var params = new URLSearchParams();
     params.append('mode', 'payment');
-    params.append('ui_mode', 'embedded');
+    params.append('ui_mode', 'embedded_page');
     params.append('line_items[0][price_data][currency]', 'usd');
     params.append('line_items[0][price_data][product_data][name]', 'Apoyo a Serendip');
     params.append('line_items[0][price_data][unit_amount]', String(amount));
