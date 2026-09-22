@@ -873,9 +873,9 @@
   var spinning = false;
 
   function computeDelay(i, total){
-    var base = 60, max = 180;
+    var base = 35, max = 295;
     var t = i / (total - 1);
-    var eased = t;
+    var eased = t * t * t;
     return base + (max - base) * eased;
   }
 
@@ -917,7 +917,7 @@
 
     var remaining = poolRemaining();
     var target = pick(remaining);
-    var total = 24;
+    var total = 50;
     var lastShown = null;
 
     function step(i){
