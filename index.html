@@ -407,19 +407,59 @@
     background: var(--switch-track); height:6px; border-radius:99px;
   }
 
+  #supportBtn{
+    position:fixed; bottom:16px; left:16px; z-index:55;
+    display:flex; align-items:center; gap:7px;
+    background: var(--accent); color:#161008; border:none; border-radius:999px;
+    padding:11px 18px; font-size:14px; font-weight:700; font-family:inherit;
+    cursor:pointer; box-shadow:0 4px 18px var(--btn-glow-1);
+  }
+  #supportBtn:hover{ filter:brightness(1.05); }
+
+  #supportOverlay{
+    position:fixed; inset:0; z-index:100; display:none;
+    align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.55); padding:16px;
+  }
+  #supportOverlay.show{ display:flex; }
+  .support-modal{
+    position:relative; width:100%; max-width:440px; max-height:88vh;
+    background: var(--surface); border:1px solid var(--line); border-radius:20px;
+    padding:26px; overflow:auto;
+  }
+  #supportClose{
+    position:absolute; top:14px; right:14px; width:30px; height:30px;
+    border-radius:50%; border:1px solid var(--line); background:var(--pill-bg);
+    color:var(--text); cursor:pointer; font-size:14px;
+  }
+  .support-modal h2{ font-family:'Fraunces',Georgia,serif; font-size:24px; margin:0 0 6px; }
+  .support-modal p{ font-size:13.5px; color:var(--text-dim); margin:0 0 18px; }
+  #amountRow{ display:flex; gap:10px; margin-bottom:18px; }
+  .amount-btn{
+    flex:1; padding:12px 0; border-radius:12px; border:1.5px solid var(--line);
+    background:var(--pill-bg); color:var(--text); font-size:15px; font-weight:700;
+    cursor:pointer; font-family:inherit;
+  }
+  .amount-btn.active{ border-color:var(--accent); background:var(--accent-soft); color:var(--accent); }
+  #customAmountWrap{
+    align-items:center; gap:8px; margin:-6px 0 18px;
+    border:1.5px solid var(--line); border-radius:12px; padding:10px 14px;
+    background:var(--pill-bg);
+  }
+  #customAmountWrap:focus-within{ border-color:var(--accent); }
+  .custom-amount-dollar{ font-size:16px; font-weight:700; color:var(--text-dim); }
+  #customAmountInput{
+    flex:1; border:none; background:transparent; outline:none;
+    font-size:16px; font-weight:700; color:var(--text); font-family:inherit; min-width:0;
+  }
+  .support-loading{ text-align:center; padding:40px 0; color:var(--text-dim); font-size:13.5px; }
+  #checkoutContainer{ min-height:2px; }
+
   footer{ margin-top:10px; font-size:11.5px; color: var(--text-dim); opacity:0.6; text-align:center; }
 
   @media (max-width:420px){
     .action-row{ flex-wrap: wrap; }
     .btn-icon{ order:3; margin-left:auto; margin-right:auto; }
-  }
-
-  /* Brillo/sombra para el botón flotante de Ko-fi, a juego con tus otros botones.
-     Es un widget externo, así que esto es un "empujón" desde afuera con CSS;
-     usamos "filter: drop-shadow" en vez de box-shadow porque se adapta a la
-     forma real del botón sin necesitar saber su border-radius exacto. */
-  [id^="kofi-widget-overlay"]{
-    filter: drop-shadow(0 4px 18px var(--btn-glow-1)) drop-shadow(0 0 0 1px var(--btn-glow-2));
   }
 </style>
 </head>
@@ -1253,7 +1293,7 @@
       rowSingle.style.display = "none";
       rowFull.style.display = "flex";
     }else{
-      topicText.innerHTML = '<span class="placeholder">Presiona girar</span>';
+      topicText.innerHTML = '<span class="placeholder">presiona girar para elegir</span>';
       topicText.style.fontSize = "";
       topicText.classList.remove("overflowing");
       rowSingle.style.display = "flex";
@@ -1336,16 +1376,119 @@
 })();
 </script>
 
-<!-- Botón flotante de Ko-fi: abre el panel de apoyo encima de la página, sin salir del sitio.
-     Reemplaza TU_USUARIO por tu nombre de usuario real de Ko-fi. -->
-<script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
+<!-- Botón flotante de apoyo, con el checkout de Stripe incrustado en la página. -->
+<script src="https://js.stripe.com/v3/"></script>
 <script>
-  kofiWidgetOverlay.draw('wvxam', {
-    'type': 'floating-chat',
-    'floating-chat.donateButton.text': 'Apoyame',
-    'floating-chat.donateButton.background-color': '#e0995f',
-    'floating-chat.donateButton.text-color': '#161008'
+(function(){
+  var STRIPE_PUBLISHABLE_KEY = 'pk_live_51UH5pLCl6NQoBqFIWliMPxYyBUl0A4XHxn4Uq5ddbQOgeBJg73zzRIflwOTgO0g7YmMUblSefnbTDGUEu1pBM52Z00YDQ4hoDWpk_live_TU_LLAVE_PUBLICA_AQUI';
+  var stripe = null;
+  var checkoutInstance = null;
+
+  var btn = document.createElement('button');
+  btn.id = 'supportBtn';
+  btn.type = 'button';
+  btn.innerHTML = '🧡 Apóyame';
+  document.body.appendChild(btn);
+
+  var overlay = document.createElement('div');
+  overlay.id = 'supportOverlay';
+  overlay.innerHTML =
+    '<div class="support-modal">' +
+      '<button type="button" id="supportClose" aria-label="Cerrar">✕</button>' +
+      '<div id="supportPicker">' +
+        '<h2>Apoya Serendip</h2>' +
+        '<p>Si te sirvió la app, invítame algo — lo que gustes.</p>' +
+        '<div id="amountRow"></div>' +
+        '<div id="customAmountWrap" style="display:none;">' +
+          '<span class="custom-amount-dollar">$</span>' +
+          '<input type="number" id="customAmountInput" min="1" step="1" placeholder="5">' +
+        '</div>' +
+        '<button type="button" class="btn btn-primary" id="supportContinue" style="width:100%;">Continuar</button>' +
+      '</div>' +
+      '<div id="checkoutContainer"></div>' +
+    '</div>';
+  document.body.appendChild(overlay);
+
+  var amountRow = overlay.querySelector('#amountRow');
+  var customAmountWrap = overlay.querySelector('#customAmountWrap');
+  var customAmountInput = overlay.querySelector('#customAmountInput');
+  var MIN_CENTS = 100; // $1.00 mínimo
+  var selectedAmount = MIN_CENTS;
+  var usingCustom = false;
+
+  var presetBtn = document.createElement('button');
+  presetBtn.type = 'button';
+  presetBtn.className = 'amount-btn active';
+  presetBtn.textContent = '$1';
+  presetBtn.addEventListener('click', function(){
+    usingCustom = false;
+    selectedAmount = MIN_CENTS;
+    presetBtn.classList.add('active');
+    customBtn.classList.remove('active');
+    customAmountWrap.style.display = 'none';
   });
+  amountRow.appendChild(presetBtn);
+
+  var customBtn = document.createElement('button');
+  customBtn.type = 'button';
+  customBtn.className = 'amount-btn';
+  customBtn.textContent = 'Otra cantidad';
+  customBtn.addEventListener('click', function(){
+    usingCustom = true;
+    presetBtn.classList.remove('active');
+    customBtn.classList.add('active');
+    customAmountWrap.style.display = 'flex';
+    customAmountInput.focus();
+  });
+  amountRow.appendChild(customBtn);
+
+  customAmountInput.addEventListener('input', function(){
+    var dollars = parseFloat(customAmountInput.value);
+    if(!dollars || dollars < 1) dollars = 1;
+    selectedAmount = Math.round(dollars * 100);
+  });
+
+  function openModal(){
+    overlay.classList.add('show');
+    document.getElementById('supportPicker').style.display = '';
+    document.getElementById('checkoutContainer').innerHTML = '';
+    usingCustom = false;
+    selectedAmount = MIN_CENTS;
+    presetBtn.classList.add('active');
+    customBtn.classList.remove('active');
+    customAmountWrap.style.display = 'none';
+    customAmountInput.value = '';
+  }
+  function closeModal(){
+    overlay.classList.remove('show');
+    if(checkoutInstance){ checkoutInstance.destroy(); checkoutInstance = null; }
+  }
+
+  btn.addEventListener('click', openModal);
+  overlay.querySelector('#supportClose').addEventListener('click', closeModal);
+  overlay.addEventListener('click', function(e){ if(e.target === overlay) closeModal(); });
+
+  overlay.querySelector('#supportContinue').addEventListener('click', async function(){
+    if(!stripe){ stripe = Stripe(STRIPE_PUBLISHABLE_KEY); }
+    document.getElementById('supportPicker').style.display = 'none';
+    var container = document.getElementById('checkoutContainer');
+    container.innerHTML = '<div class="support-loading">Cargando pago seguro…</div>';
+    try{
+      var resp = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: selectedAmount })
+      });
+      var data = await resp.json();
+      if(!resp.ok) throw new Error(data.error || 'Error al crear el pago');
+      container.innerHTML = '';
+      checkoutInstance = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret });
+      checkoutInstance.mount('#checkoutContainer');
+    }catch(err){
+      container.innerHTML = '<div class="support-loading">No se pudo cargar el pago. Intenta de nuevo.</div>';
+    }
+  });
+})();
 </script>
 </body>
 </html>
