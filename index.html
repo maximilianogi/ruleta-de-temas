@@ -1380,7 +1380,7 @@
 <script src="https://js.stripe.com/v3/"></script>
 <script>
 (function(){
-  var STRIPE_PUBLISHABLE_KEY = 'pk_live_51UH5pLCl6NQoBqFIWliMPxYyBUl0A4XHxn4Uq5ddbQOgeBJg73zzRIflwOTgO0g7YmMUblSefnbTDGUEu1pBM52Z00YDQ4hoDWpk_live_TU_LLAVE_PUBLICA_AQUI';
+  var STRIPE_PUBLISHABLE_KEY = 'pk_live_TU_LLAVE_PUBLICA_AQUI';
   var stripe = null;
   var checkoutInstance = null;
 
@@ -1482,7 +1482,7 @@
       var data = await resp.json();
       if(!resp.ok) throw new Error(data.error || 'Error al crear el pago');
       container.innerHTML = '';
-      checkoutInstance = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret });
+      checkoutInstance = await stripe.createEmbeddedCheckoutPage({ clientSecret: data.clientSecret });
       checkoutInstance.mount('#checkoutContainer');
     }catch(err){
       container.innerHTML = '<div class="support-loading">No se pudo cargar el pago. Intenta de nuevo.</div>';
