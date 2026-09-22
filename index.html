@@ -455,6 +455,18 @@
   .support-loading{ text-align:center; padding:40px 0; color:var(--text-dim); font-size:13.5px; }
   #checkoutContainer{ min-height:2px; }
 
+  #thanksToast{
+    position:fixed; top:18px; left:50%; z-index:120;
+    transform: translate(-50%, -20px); opacity:0;
+    background: var(--accent); color:#161008;
+    font-size:14.5px; font-weight:700; font-family:inherit;
+    padding:13px 22px; border-radius:999px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.25);
+    transition: transform .35s ease, opacity .35s ease;
+    white-space:nowrap;
+  }
+  #thanksToast.show{ transform: translate(-50%, 0); opacity:1; }
+
   footer{ margin-top:10px; font-size:11.5px; color: var(--text-dim); opacity:0.6; text-align:center; }
 
   @media (max-width:420px){
@@ -1488,6 +1500,22 @@
       container.innerHTML = '<div class="support-loading">No se pudo cargar el pago. Intenta de nuevo.</div>';
     }
   });
+
+  // ---------- mensaje de agradecimiento al volver de un pago exitoso ----------
+  if(new URLSearchParams(window.location.search).get('donacion') === 'gracias'){
+    var thanks = document.createElement('div');
+    thanks.id = 'thanksToast';
+    thanks.textContent = '🧡 ¡Gracias por tu apoyo!';
+    document.body.appendChild(thanks);
+    requestAnimationFrame(function(){ thanks.classList.add('show'); });
+    setTimeout(function(){
+      thanks.classList.remove('show');
+      setTimeout(function(){ thanks.remove(); }, 400);
+    }, 4500);
+    // Limpia la URL para que no se vuelva a mostrar si la persona refresca.
+    var cleanUrl = window.location.pathname;
+    window.history.replaceState({}, document.title, cleanUrl);
+  }
 })();
 </script>
 </body>
